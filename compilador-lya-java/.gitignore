@@ -1,0 +1,24 @@
+# Archivos compilados y binarios
+/build/
+/dist/
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Metadatos privados de NetBeans (IMPORTANTE)
+/nbproject/private/
+/nbproject/Makefile-*.mk
+/nbproject/Package-*.bash
+build.xml
+nbbuild/
+.nb-gradle/
+
+# Archivos de sistema o logs
+Thumbs.db
+.DS_Store
+*.log
