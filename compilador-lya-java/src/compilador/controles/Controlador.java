@@ -44,7 +44,16 @@ public class Controlador implements ActionListener {
         }
         
         else if (e.getSource() == vista.getItemEncontrar()) {
+            String texto = vista.getArchivo();
             
+            if (texto.isEmpty()) {
+                vista.mostrarError("No hay texto para analizar");
+                return;
+            }
+            
+            String resultadoBusqueda = modelo.buscaEnTexto(texto);
+            vista.limpiarResultado();
+            vista.mostrarResultado(resultadoBusqueda);
         }
     }
 }
