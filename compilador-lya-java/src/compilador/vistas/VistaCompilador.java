@@ -46,7 +46,7 @@ public class VistaCompilador extends JFrame {
         areaResultado.setEditable(false);
         JScrollPane scrollResultados = new JScrollPane(areaResultado);
         scrollResultados.setBorder(BorderFactory.createTitledBorder("Resultado"));
-        scrollResultados.setPreferredSize(new Dimension(900,150));
+        scrollResultados.setPreferredSize(new Dimension(900,200));
         add(scrollResultados, BorderLayout.SOUTH);
 
     }
