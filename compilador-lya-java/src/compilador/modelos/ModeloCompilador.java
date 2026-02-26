@@ -10,8 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ModeloCompilador {
-
-
+    
     public String leeContenidoArchivo(File archivo) throws IOException {
         StringBuilder contenido = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
@@ -24,23 +23,27 @@ public class ModeloCompilador {
     }
 
     public String buscaEnTexto(String texto) {
-        String regex = "[a-zA_Z]\\w*";
-        
+        String regex = "([a-zA-Z]\\w*)|(\\d+)";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(texto);
-        
-        List<String> identificadores = new ArrayList<>();
-        
-        while (matcher.find()){
-            identificadores.add(matcher.group());
+
+        List<String> Tokens = new ArrayList<>();
+
+        while (matcher.find()) {
+            if (matcher.group(1) != null) {
+                Tokens.add("[I] " + matcher.group(1));
+            } else if (matcher.group(2) != null) {
+                Tokens.add("[N] " + matcher.group(2));
+            }
         }
-        
+
         StringBuilder reporte = new StringBuilder();
-        reporte.append("Total de identificadores: ").append(identificadores.size()).append("\n");
+        reporte.append("Total encontrados: ").append(Tokens.size()).append("\n\n");
         
-        for (int i = 0; i <  identificadores.size(); i++) {
-            reporte.append((i + 1)).append(". ").append(identificadores.get(i)).append("\n");
+        for (int i = 0; i < Tokens.size(); i++) {
+            reporte.append((i + 1)).append(". ").append(Tokens.get(i)).append("\n");
         }
+        
         return reporte.toString();
     }
 }
