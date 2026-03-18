@@ -2,15 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Lexema;
+package compilador.modelos;
 
 /**
  *
  * @author rober
  */
 public class ListaLexemas {
-      // Operadores Aritmeticos 1-20
-    public static final int MAS = 03;
+ public static final int MAS = 03;
     public static final int MENOS = 05;
     public static final int MULT = 06;
     public static final int DIV = 11;
@@ -29,7 +28,5 @@ public class ListaLexemas {
     public static final int PUNTO_COMA = 200;
     public static final int PUNTO = 276;
     public static final int ABRE_PARENT = 300;
-    public static final int CIERRA_PARENT = 475;
-
+    public static final int CIERRA_PARENT = 475;   
 }
-
