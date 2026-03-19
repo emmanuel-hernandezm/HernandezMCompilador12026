@@ -23,7 +23,7 @@ public class ProcesoEncontrar{
     
 public static void analizarTexto(String texto) {
 
-        String regex = "([a-zA-Z]\\w*)|(0|[1-9]\\w*)";
+        String regex = "([a-zA-Z]\\w*)|(0|[1-9]\\d*)|(\\+|-|\\*|/)|(==|!=|<=|>=|<|>|=)|(;|,|.|\\(|\\))";
         
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(texto);
