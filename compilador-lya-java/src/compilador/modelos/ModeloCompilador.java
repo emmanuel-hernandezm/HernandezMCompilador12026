@@ -23,7 +23,7 @@ public class ModeloCompilador {
     }
 
     public String buscaEnTexto(String texto) {
-        String regex = "([a-zA-Z]\\w*)|(0|[1-9]\\d*)|(\\+|-|\\*|/)|(==|!=|<=|>=|<|>|=)|(;|,|\\.|\\(|\\))";
+        String regex = "([a-zA-Z]\\w*)|(0|[1-9]\\d*)|(\\+|-|\\*|/)|(==|!=|<=|>=|<|>|=)|(;|,|\\.|\\(|\\))|(\\S)";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(texto);
 
@@ -40,7 +40,9 @@ public class ModeloCompilador {
                 Tokens.add("[OR] " + matcher.group(4));
             } else if (matcher.group(5) != null) {
                 Tokens.add("[SE] " + matcher.group(5));
-            } 
+            } else if (matcher.group(6) != null) {
+                Tokens.add("[E] " + matcher.group(6));
+            }
         }
 
         StringBuilder reporte = new StringBuilder();

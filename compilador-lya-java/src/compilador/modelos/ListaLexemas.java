@@ -1,15 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package compilador.modelos;
 
-/**
- *
- * @author rober
- */
+
 public class ListaLexemas {
- public static final int MAS = 03;
+    
+    // Operadores Aritmeticos
+    public static final int MAS = 03;
     public static final int MENOS = 05;
     public static final int MULT = 06;
     public static final int DIV = 11;
