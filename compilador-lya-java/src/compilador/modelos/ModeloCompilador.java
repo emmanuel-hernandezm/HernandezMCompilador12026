@@ -27,29 +27,24 @@ public class ModeloCompilador {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(texto);
 
-        List<String> Tokens = new ArrayList<>();
-
+        List<String> tokens = new ArrayList<>();
+        String[] etiquetas = {"", "[I] ", "[N] ", "[OA] ", "[OR] ", "[SE] ", "[E] "};
+        int cantidadGrupos = matcher.groupCount();
+        
         while (matcher.find()) {
-            if (matcher.group(1) != null) {
-                Tokens.add("[I] " + matcher.group(1));
-            } else if (matcher.group(2) != null) {
-                Tokens.add("[N] " + matcher.group(2));
-            } else if (matcher.group(3) != null) {
-                Tokens.add("[OA] " + matcher.group(3));
-            } else if (matcher.group(4) != null) {
-                Tokens.add("[OR] " + matcher.group(4));
-            } else if (matcher.group(5) != null) {
-                Tokens.add("[SE] " + matcher.group(5));
-            } else if (matcher.group(6) != null) {
-                Tokens.add("[E] " + matcher.group(6));
+            for (int i = 1; i <= cantidadGrupos; i++) {
+                if (matcher.group(i) != null) {
+                    tokens.add(etiquetas[i] + matcher.group(i));
+                    break;
+                }
             }
         }
 
         StringBuilder reporte = new StringBuilder();
-        reporte.append("Total encontrados: ").append(Tokens.size()).append("\n\n");
+        reporte.append("Total encontrados: ").append(tokens.size()).append("\n\n");
         
-        for (int i = 0; i < Tokens.size(); i++) {
-            reporte.append((i + 1)).append(". ").append(Tokens.get(i)).append("\n");
+        for (int i = 0; i < tokens.size(); i++) {
+            reporte.append((i + 1)).append(". ").append(tokens.get(i)).append("\n");
         }
         
         return reporte.toString();
