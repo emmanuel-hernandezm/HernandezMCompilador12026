@@ -9,7 +9,9 @@ public class VistaCompilador extends JFrame {
     private JTextArea areaArchivo; 
     private JTextArea areaResultado;  
     private JMenuItem itemAbrir;
-    private JMenuItem itemEncontrar;    
+    // Solo cambiamos 'itemEncontrar' por estos dos:
+    private JMenuItem itemLexico;
+    private JMenuItem itemSintactico;
 
     public VistaCompilador() {
         super("Compilador - Lenguajes y Autómatas");
@@ -24,15 +26,22 @@ public class VistaCompilador extends JFrame {
         itemAbrir = new JMenuItem("Abrir");
         menuArchivo.add(itemAbrir);
         
-        JMenu menuProcesos = new JMenu("Procesos");
-        itemEncontrar = new JMenuItem("Encontrar");
-        menuProcesos.add(itemEncontrar);
+        // Cambio de nombre de "Procesos" a "Compilar"
+        JMenu menuCompilar = new JMenu("Compilar");
+        itemLexico = new JMenuItem("Léxico");
+        itemSintactico = new JMenuItem("Sintáctico");
+        
+        // Se deshabilitan por defecto como indica el audio
+        itemLexico.setEnabled(false);
+        itemSintactico.setEnabled(false);
+
+        menuCompilar.add(itemLexico);
+        menuCompilar.add(itemSintactico);
 
         menuBar.add(menuArchivo);
-        menuBar.add(menuProcesos);
+        menuBar.add(menuCompilar);
         setJMenuBar(menuBar);
 
-        
         areaArchivo = new JTextArea();
         areaArchivo.setFont(new Font("Consolas", Font.PLAIN, 14));
         areaArchivo.setEditable(false);
@@ -48,36 +57,27 @@ public class VistaCompilador extends JFrame {
         scrollResultados.setBorder(BorderFactory.createTitledBorder("Resultado"));
         scrollResultados.setPreferredSize(new Dimension(900,200));
         add(scrollResultados, BorderLayout.SOUTH);
-
     }
 
-
-    public String getArchivo() {
-        return areaArchivo.getText();
-    }
-
-    public void setArchivo(String texto) {
-        areaArchivo.setText(texto);
-    }
-
+    // Mantuve todos tus métodos originales, solo actualicé los nombres de los items
+    public String getArchivo() { return areaArchivo.getText(); }
+    public void setArchivo(String texto) { areaArchivo.setText(texto); }
     public void mostrarResultado(String texto) {
         areaResultado.append(texto + "\n"); 
         areaResultado.setCaretPosition(areaResultado.getDocument().getLength());
     }
-    
-    public void limpiarResultado() {
-        areaResultado.setText("");
-    }
-
+    public void limpiarResultado() { areaResultado.setText(""); }
     public void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error de Compilación", JOptionPane.ERROR_MESSAGE);
     }
 
     public void setListeners(ActionListener listener) {
         itemAbrir.addActionListener(listener);
-        itemEncontrar.addActionListener(listener);
+        itemLexico.addActionListener(listener);
+        itemSintactico.addActionListener(listener);
     }
     
     public JMenuItem getItemAbrir() { return itemAbrir; }
-    public JMenuItem getItemEncontrar() { return itemEncontrar; }
+    public JMenuItem getItemLexico() { return itemLexico; }
+    public JMenuItem getItemSintactico() { return itemSintactico; }
 }
