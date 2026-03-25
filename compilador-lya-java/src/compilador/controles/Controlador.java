@@ -62,13 +62,16 @@ public class Controlador implements ActionListener {
             
             String resultadoLexico = modelo.buscaEnTexto(texto); 
             vista.limpiarResultado();
-            vista.mostrarResultado("Resultado" + resultadoLexico);
+            vista.mostrarResultado(resultadoLexico);
 
-            vista.getItemSintactico().setEnabled(true);
+            if (!modelo.hayCaracteresInvalidos()) {
+                vista.getItemSintactico().setEnabled(true);
+            } else {
+                vista.getItemSintactico().setEnabled(false);
+            }
         }
 
         else if (e.getSource() == vista.getItemSintactico()) {
-            vista.mostrarResultado("\nIniciando Análisis Sintáctico...");
         }
     }   
     private File obtenerDirectorio(){
