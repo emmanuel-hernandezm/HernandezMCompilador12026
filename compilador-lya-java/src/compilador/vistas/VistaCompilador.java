@@ -26,12 +26,10 @@ public class VistaCompilador extends JFrame {
         itemAbrir = new JMenuItem("Abrir");
         menuArchivo.add(itemAbrir);
         
-        // Cambio de nombre de "Procesos" a "Compilar"
         JMenu menuCompilar = new JMenu("Compilar");
         itemLexico = new JMenuItem("Léxico");
         itemSintactico = new JMenuItem("Sintáctico");
         
-        // Se deshabilitan por defecto como indica el audio
         itemLexico.setEnabled(false);
         itemSintactico.setEnabled(false);
 
@@ -59,7 +57,6 @@ public class VistaCompilador extends JFrame {
         add(scrollResultados, BorderLayout.SOUTH);
     }
 
-    // Mantuve todos tus métodos originales, solo actualicé los nombres de los items
     public String getArchivo() { return areaArchivo.getText(); }
     public void setArchivo(String texto) { areaArchivo.setText(texto); }
     public void mostrarResultado(String texto) {

@@ -27,9 +27,12 @@ public class Controlador implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
        
-        // 1. Lógica para Abrir Archivo
         if (e.getSource() == vista.getItemAbrir()) {
+            File dirInicial = obtenerDirectorio();
             JFileChooser selector = new JFileChooser();
+            if(dirInicial.exists() && dirInicial.isDirectory()){
+                selector.setCurrentDirectory(dirInicial);
+            }
             int resultado = selector.showOpenDialog(vista);
 
             if (resultado == JFileChooser.APPROVE_OPTION) {
@@ -40,9 +43,7 @@ public class Controlador implements ActionListener {
                     vista.limpiarResultado();
                     vista.mostrarResultado("Archivo cargado con éxito: " + archivo.getName());
                     
-                    // Al abrir el archivo, se libera el botón de Léxico
                     vista.getItemLexico().setEnabled(true);
-                    // Aseguramos que el sintáctico siga bloqueado hasta que pase el léxico
                     vista.getItemSintactico().setEnabled(false);
                     
                 } catch (IOException ex) {
@@ -51,7 +52,6 @@ public class Controlador implements ActionListener {
             }
         }
         
-        // 2. Lógica para Análisis Léxico (Reemplaza a itemEncontrar)
         else if (e.getSource() == vista.getItemLexico()) {
             String texto = vista.getArchivo();
             
@@ -60,20 +60,21 @@ public class Controlador implements ActionListener {
                 return;
             }
             
-            // Aquí llamarías a tu lógica de tokens (ej. números hexadecimales, ciclos for, etc.)
             String resultadoLexico = modelo.buscaEnTexto(texto); 
             vista.limpiarResultado();
-            vista.mostrarResultado("--- Resultado Análisis Léxico ---\n" + resultadoLexico);
+            vista.mostrarResultado("Resultado" + resultadoLexico);
 
-            // Si no hubo errores (asumiendo que tu modelo lo valida), se libera el Sintáctico
-            // Por ahora lo activamos directamente tras el clic
             vista.getItemSintactico().setEnabled(true);
         }
 
-        // 3. Lógica para Análisis Sintáctico
         else if (e.getSource() == vista.getItemSintactico()) {
             vista.mostrarResultado("\nIniciando Análisis Sintáctico...");
-            // Aquí iría la lógica de estructura formal que estás preparando
         }
-    }
+    }   
+    private File obtenerDirectorio(){
+        String userDir = System.getProperty("user.dir");
+        File testDir = new File(userDir, "test");
+        return testDir;
+        
+    } 
 }
