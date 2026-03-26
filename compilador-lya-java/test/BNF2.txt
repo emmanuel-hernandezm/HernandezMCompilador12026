@@ -1,0 +1,68 @@
+<Programa> ::= <Bloque> "." 
+<Bloque> ::= <Seccion_Const> <Seccion_Var> <Seccion_Proced> <Proposición>
+<Seccion_Const> ::= "const" <Lista_Const> ";" | ε 
+
+<Lista_Const> ::= id "=" num <Lista_Const_Resto> 
+
+<Lista_Const_Resto> ::= "," id "=" num <Lista_Const_Resto> | ε 
+
+<Seccion_Var> ::= "var" <Lista_Var> ";" | ε 
+
+<Lista_Var> ::= id <Lista_Var_Resto> 
+
+<Lista_Var_Resto> ::= "," id <Lista_Var_Resto> | ε
+<Seccion_Proced> ::= <Lista_Proced> | ε 
+
+<Lista_Proced> ::= <Decl_Proced> <Lista_Proced_Resto> 
+
+<Lista_Proced_Resto> ::= <Decl_Proced> <Lista_Proced_Resto> | ε 
+
+<Decl_Proced> ::= "proced" id ";" <Bloque> ";"
+<Proposición> ::= "begin" <Lista_Proposiciones> "end" 
+
+
+| id "=" <Expresión> 
+
+| "write" <Argumento_Write> 
+
+| "read" id 
+
+| "call" id 
+
+| "if" <Condición> "then" <Proposición> 
+
+| "while" <Condición> "do" <Proposición> 
+
+| "for" id "=" <Expresión> <Direccion_For> <Expresión> "do" <Proposición>
+<Lista_Proposiciones> ::= <Proposición> <Lista_Proposiciones_Resto> 
+
+<Lista_Proposiciones_Resto> ::= ";" <Proposición> <Lista_Proposiciones_Resto> | ε
+<Expresión> ::= <Término> <Expresión_Resto> 
+
+
+<Expresión_Resto> ::= "+" <Término> <Expresión_Resto> 
+
+| "-" <Término> <Expresión_Resto> 
+
+| ε
+
+
+<Término> ::= <Factor> <Término_Resto> 
+
+
+<Término_Resto> ::= "*" <Factor> <Término_Resto> 
+
+| "/" <Factor> <Término_Resto> 
+
+| ε
+
+
+<Factor> ::= "(" <Expresión> ")" | id | num
+<Condición> ::= <Expresión> <Operador_Relacional> <Expresión> 
+
+<Operador_Relacional> ::= "==" | "!=" | "<" | ">" | "<=" | ">=" 
+
+
+<Argumento_Write> ::= id | num 
+
+<Direccion_For> ::= "to" | "down"
