@@ -30,7 +30,12 @@ public class ModeloCompilador {
     public String buscaEnTexto(String texto) {
         freeWilly = false;
         
-        String regex = "([a-zA-Z]\\w*)|(0|[1-9]\\d*)|(\\+|-|\\*|/)|(==|!=|<=|>=|<|>|=)|(;|,|\\.|\\(|\\))|(\\S)";
+        String regex = "([a-zA-Z]\\w*)|" +
+                       "(0|[1-9]\\d*)|" +
+                       "(\\+|-|\\*|/)|" +
+                       "(==|!=|<=|>=|<|>|=)|" +
+                       "(;|,|\\.|\\(|\\))|" +
+                       "(\\S)";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(texto);
 
