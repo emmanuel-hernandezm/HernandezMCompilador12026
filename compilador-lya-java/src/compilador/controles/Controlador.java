@@ -3,6 +3,7 @@ package compilador.controles;
 
 import compilador.modelos.ModeloCompilador;
 import compilador.vistas.VistaCompilador;
+import java.awt.Color;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ public class Controlador implements ActionListener {
     public void actionPerformed(ActionEvent e) {
        
         if (e.getSource() == vista.getItemAbrir()) {
+            vista.getAreaResultado().setForeground(Color.BLUE);
             File dirInicial = obtenerDirectorio();
             JFileChooser selector = new JFileChooser();
             if(dirInicial.exists() && dirInicial.isDirectory()){
@@ -66,8 +68,10 @@ public class Controlador implements ActionListener {
 
             if (!modelo.hayCaracteresInvalidos()) {
                 vista.getItemSintactico().setEnabled(true);
+                vista.getAreaResultado().setForeground(Color.BLUE);
             } else {
                 vista.getItemSintactico().setEnabled(false);
+                vista.getAreaResultado().setForeground(Color.red);
             }
         }
 

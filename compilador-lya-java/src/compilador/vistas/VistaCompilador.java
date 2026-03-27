@@ -77,4 +77,5 @@ public class VistaCompilador extends JFrame {
     public JMenuItem getItemAbrir() { return itemAbrir; }
     public JMenuItem getItemLexico() { return itemLexico; }
     public JMenuItem getItemSintactico() { return itemSintactico; }
+    public JTextArea getAreaResultado() { return areaResultado; }
 }
