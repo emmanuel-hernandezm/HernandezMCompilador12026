@@ -42,7 +42,7 @@ public class VistaCompilador extends JFrame {
 
         areaArchivo = new JTextArea();
         areaArchivo.setFont(new Font("Consolas", Font.PLAIN, 14));
-        areaArchivo.setEditable(false);
+        areaArchivo.setEditable(true);
         JScrollPane scrollAreaArch = new JScrollPane(areaArchivo);
         scrollAreaArch.setBorder(BorderFactory.createTitledBorder("Contenido del Archivo"));
         add(scrollAreaArch, BorderLayout.CENTER);
