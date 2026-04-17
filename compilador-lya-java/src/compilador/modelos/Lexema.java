@@ -4,11 +4,13 @@ public class Lexema {
     private String dato;
     private String tipo;
     private int token;
+    private int posError;
 
-    public Lexema(String dato, String tipo, int token) {
+    public Lexema(String dato, String tipo, int token, int posicion) {
         this.dato = dato;
         this.tipo = tipo;
         this.token = token;
+        this.posError = posicion;
     }
 
     public String getDato() {
@@ -34,12 +36,18 @@ public class Lexema {
     public void setToken(int token) {
         this.token = token;
     }
-    
-    
+
+    public int getPosError() {
+        return posError;
+    }
+
+    public void setPosError(int posError) {
+        this.posError = posError;
+    }
 
     @Override
     public String toString() {
-        return "" + dato + "\t" + tipo + "\t" + token + "\t";
+        return String.format("%-20s %-8s %d", dato, tipo, token);
     }
     
     
