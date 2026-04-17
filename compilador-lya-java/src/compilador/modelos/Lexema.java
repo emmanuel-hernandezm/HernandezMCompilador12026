@@ -3,10 +3,12 @@ package compilador.modelos;
 public class Lexema {
     private String dato;
     private String tipo;
+    private int token;
 
-    public Lexema(String dato, String tipo) {
+    public Lexema(String dato, String tipo, int token) {
         this.dato = dato;
         this.tipo = tipo;
+        this.token = token;
     }
 
     public String getDato() {
@@ -25,9 +27,19 @@ public class Lexema {
         this.tipo = tipo;
     }
 
+    public int getToken() {
+        return token;
+    }
+
+    public void setToken(int token) {
+        this.token = token;
+    }
+    
+    
+
     @Override
     public String toString() {
-        return "[" + dato + "\t" + tipo + "]";
+        return "" + dato + "\t" + tipo + "\t" + token + "\t";
     }
     
     

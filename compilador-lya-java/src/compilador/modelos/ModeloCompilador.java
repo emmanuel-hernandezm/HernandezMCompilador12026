@@ -12,6 +12,27 @@ import java.util.regex.Pattern;
 public class ModeloCompilador {
     private boolean freeWilly = false;
     
+     private int obtenerValorReservada(String palabra) {
+        switch(palabra.toLowerCase()) {
+            case "const": return ListaLexemas.CONST;
+            case "var": return ListaLexemas.VAR;
+            case "procedure": return ListaLexemas.PROCED;
+            case "begin": return ListaLexemas.BEGIN;
+            case "end": return ListaLexemas.END;
+            case "write": return ListaLexemas.WRITE;
+            case "read": return ListaLexemas.READ;
+            case "call": return ListaLexemas.CALL;
+            case "if": return ListaLexemas.IF;
+            case "then": return ListaLexemas.THEN;
+            case "while": return ListaLexemas.WHILE;
+            case "do": return ListaLexemas.DO;
+            case "for": return ListaLexemas.FOR;
+            case "to": return ListaLexemas.TO;
+            case "downto": return ListaLexemas.DOWN;
+            default: return -1;
+        }
+    }
+    
     public String leeContenidoArchivo(File archivo) throws IOException {
         StringBuilder contenido = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
@@ -39,7 +60,7 @@ public class ModeloCompilador {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(texto);
 
-        List<String> tokens = new ArrayList<>();
+        List<Lexema> tokens = new ArrayList<>();
         
         String[] etiquetas = {"", "[I] ", "[N] ", "[OA] ", "[OR] ", "[SE] ", "[E] "};
         
@@ -49,20 +70,44 @@ public class ModeloCompilador {
         while (matcher.find()) {
             for (int i = 1; i <= cantidadGrupos; i++) {
                 if (matcher.group(i) != null) {
+                    String grupo = matcher.group(i);
+                    String etiqueta = etiquetas[i];
+                    
+                    int codigo = -1;
+                    
+                    if(i == 1){
+                        int reservada = obtenerValorReservada(grupo);
+                        if(reservada != -1){
+                            etiqueta = "[PR]";
+                            codigo = reservada;
+                        }else{
+                            etiqueta = "[I]";
+                            codigo = ListaLexemas.ID;
+                        }
+                    }
                     if(i == 6){
                         freeWilly = true;
-                        tokens.add("Error en la posicion [" + posError + "] - Caracter no reconocido: " + matcher.group(i));
+                        etiqueta = "[E]";
+                        codigo = -1;
+                       // tokens.add("Error en la posicion [" + posError + "] - Caracter no reconocido: " + matcher.group(i));
                     } else {
-                        tokens.add(etiquetas[i] + matcher.group(i));
+                        //tokens.add(etiquetas[i] + matcher.group(i));
                     }
+                    tokens.add(new Lexema(grupo, etiqueta, codigo));
                     posError ++;
                     break;
                 }
             }
         }
+        
+        System.out.println("Tokens encontrados: ");
+        for  (Lexema e : tokens){
+            System.out.println(e);
+        }
+
 
         StringBuilder reporte = new StringBuilder();
-        if (freeWilly) {
+        /*if (freeWilly) {
             reporte.append("No es posible compilar: \n\n");
             for (String linea : tokens) {
                 if (linea.startsWith("Error")) {
@@ -74,7 +119,7 @@ public class ModeloCompilador {
             for (int i = 0; i < tokens.size(); i++) {
                 reporte.append((i + 1)).append(". ").append(tokens.get(i)).append("\n");
             }
-        }
+        }*/
         
         return reporte.toString();
     }
