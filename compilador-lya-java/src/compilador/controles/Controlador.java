@@ -29,6 +29,7 @@ public class Controlador implements ActionListener {
     public void actionPerformed(ActionEvent e) {
        
         if (e.getSource() == vista.getItemAbrir()) {
+            vista.getAreaResultado().setText("");
             vista.getAreaResultado().setForeground(Color.BLUE);
             File dirInicial = obtenerDirectorio();
             JFileChooser selector = new JFileChooser();

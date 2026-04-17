@@ -45,9 +45,5 @@ public class ListaLexemas {
     // Genericos 1151 - 1200
     public static final int ID = 1160;
     public static final int NUM = 1170;
-
-
-
-
-
+    
 }
