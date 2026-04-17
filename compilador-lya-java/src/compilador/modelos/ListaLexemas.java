@@ -23,5 +23,31 @@ public class ListaLexemas {
     public static final int PUNTO_COMA = 200;
     public static final int PUNTO = 276;
     public static final int ABRE_PARENT = 300;
-    public static final int CIERRA_PARENT = 475;   
+    public static final int CIERRA_PARENT = 475; 
+    
+    // Palabras reservadas 1001 - 1150
+    public static final int CONST = 1001;
+    public static final int VAR = 1010;
+    public static final int PROCED = 1020;
+    public static final int BEGIN = 1030;
+    public static final int END = 1040;
+    public static final int WRITE = 1050;
+    public static final int READ = 1060;
+    public static final int CALL = 1070;
+    public static final int IF = 1080;
+    public static final int THEN = 1090;
+    public static final int WHILE = 1100;
+    public static final int DO = 1110;
+    public static final int FOR = 1120;
+    public static final int TO = 1130;
+    public static final int DOWN = 1140;
+    
+    // Genericos 1151 - 1200
+    public static final int ID = 1160;
+    public static final int NUM = 1170;
+
+
+
+
+
 }
