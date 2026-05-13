@@ -1,0 +1,41 @@
+<Programa>	{ const, var, proced, begin, id, write, read, call, if, while, for }
+
+<Bloque>	{ const, var, proced, begin, id, write, read, call, if, while, for }
+
+<SC>		{ const, ε }
+
+<LC>		{ id }
+
+<LCR>		{ , , ε }
+
+<SV>		{ var, ε }
+
+<LV>		{ id }
+
+<LVR>		{ , , ε }
+
+<SP>		{ proced, ε }
+
+<Proposicion>	{ begin, id, write, read, call, if, while, for }
+
+<LP>		{ begin, id, write, read, call, if, while, for }
+
+<LPR>		{ ; , ε }
+
+<Expresion>	{ (, id, num }
+
+<ExpresionR>	{ +, -, ε }
+
+<Termino>	{ (, id, num }
+
+<TerminoR>	{ *, /, ε }
+
+<Factor>	{ (, id, num }
+
+<Condicion>	{ (, id, num }
+
+<OR>		{ ==, !=, <, >, <=, >=}
+
+<AW>		{ id, num}
+
+<DF>		{ to, down}

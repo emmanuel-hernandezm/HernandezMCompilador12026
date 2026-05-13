@@ -1,0 +1,108 @@
+G = (Vn, Vt, S, P)
+
+
+
+Vn(No terminales):
+
+<Programa>
+<Bloque>
+<Seccion_Const>
+<Lista_Const>
+<Lista_Const_Resto>
+<Seccion_Var>
+<Lista_Var>
+<Lista_Var_Resto>
+<Seccion_Proced>
+<Lista_Proced>
+<Lista_Proced_Resto>
+<Decl_Proced>
+<Proposición>
+<Lista_Proposiciones>
+<Lista_Proposiciones_Resto>
+<Expresión>
+<Expresión_Resto>
+<Término>
+<Término_Resto>
+<Factor>
+<Condición>
+<Operador_Relacional>
+<Argumento_Write>
+<Direccion_For>
+
+
+
+
+Vt(Terminales):
+
+id, num, const, var, proced, begin, end, write, read, call, if, then, while, do,
+for, to, down, =, ==, !=, <, >, <=, >=, +, -, *, /, (, ), ., ",", ;
+
+
+
+
+S(Simbolo Inicial): Programa
+
+
+
+
+P(Producciones):
+
+<Programa>                	-> <Bloque> "."
+
+<Bloque>                  	-> <SC> <SV> <SP> <Proposicion>
+
+<SC>		           	-> "const" <Lista_Const> ";" 
+<SC>     		  	-> ε
+<LC>		             	-> id "=" num <LCR>
+<LCR>       			-> "," id "=" num <LCR> 
+<LCR>	  			-> ε
+
+<SV>    	         	-> "var" <LV> ";" 
+<SV>			  	-> ε
+<LV>		               	-> id <LV>
+<LVR>         			-> "," id <LVR> 
+<LVR>			 	-> ε
+
+<SP>          			-> "proced" id ";" <Bloque> ";" <SP> 
+<SP>			  	-> ε
+
+<Proposicion>             	-> "begin" <LP> "end"
+<Proposicion>             	-> id "=" <Expresion>
+<Proposicion>		  	-> "write" <AW>
+<Proposicion>		 	-> "read" id
+<Proposicion>		  	-> "call" id
+<Proposicion>		  	-> "if" <Condicion> "then" <Proposicion>
+<Proposicion>		 	-> "while" <Condicion> "do" <Proposicion>
+<Proposicion>		 	-> "for" id "=" <Expresion> <DF> <Expresion> "do" <Proposicion>
+
+<LP>			     	-> <Proposicion> <LPR>
+<LRP>			 	-> ";" <Proposicion> <LPR> 
+<LPR>				-> ε
+
+<Expresion>               	-> <Termino> <ExpresionR>
+<ExpresionR>	         	-> "+" <Termino> <ExpresionR>
+<ExpresionR>	 		-> "-" <Termino> <ExpresionR> 
+<ExpresionR>	 		-> ε
+
+<Termino>                 	-> <Factor> <TerminoR>
+<TerminoR>	           	-> "*" <Factor> <TerminoR> 
+<TerminoR>			-> "/" <Factor> <TerminoR> 
+<TerminoR>			-> ε
+
+<Factor>                  	-> "(" <Expresion> ")" 
+<Factor> 			-> id 
+<Factor>			-> num
+
+<Condicion>               	-> <Expresion> <OR> <Expresion>
+<OR>		 		-> "=="
+<OR>		 		-> "!="
+<OR>		 		-> "<"
+<OR>				-> ">"
+<OR>		 		-> "<="
+<OR>				-> ">="
+
+<AW>			  	-> id
+<AW>			  	-> num
+
+<DF>			  	-> to
+<DF>			  	-> down
