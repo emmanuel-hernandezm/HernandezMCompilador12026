@@ -66,10 +66,8 @@ P(Producciones):
 <Lista_Var_Resto> -> "," id <Lista_Var_Resto>
 <Lista_Var_Resto> -> ε
 
-<Seccion_Proced> -> <Decl_Proced> <Seccion_Proced>
+<Seccion_Proced> -> "proced" id ";" <Bloque> ";" <Seccion_Proced>
 <Seccion_Proced> -> ε
-
-<Decl_Proced> -> "proced" id ";" <Bloque> ";"
 
 <Proposición> -> "begin" <Lista_Proposiciones> "end"
 <Proposición> -> id "=" <Expresión>
