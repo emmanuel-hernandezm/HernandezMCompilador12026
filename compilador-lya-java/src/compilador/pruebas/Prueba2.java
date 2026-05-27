@@ -8,7 +8,7 @@ package compilador.pruebas;
  *
  * @author rober
  */
-import compilador.modelos.Lexema;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
