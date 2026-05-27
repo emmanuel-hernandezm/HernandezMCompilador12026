@@ -83,17 +83,13 @@ P(Producciones):
 <Lista_Proposiciones_Resto> -> ";" <Proposición> <Lista_Proposiciones_Resto>
 <Lista_Proposiciones_Resto> -> ε
 
-<Expresión> -> <Término> <Expresión_Resto>
+<Expresion> -> <Termino>
+<Expresion> -> <Termino> + <Expresion>
+<Expresion> -> <Termino> - <Termino>
 
-<Expresión_Resto> -> "+" <Término> <Expresión_Resto>
-<Expresión_Resto> -> "-" <Término> <Expresión_Resto>
-<Expresión_Resto> -> ε
-
-<Término> -> <Factor> <Término_Resto>
-
-<Término_Resto> -> "*" <Factor> <Término_Resto>
-<Término_Resto> -> "/" <Factor> <Término_Resto>
-<Término_Resto> -> ε
+<Termino> -> <Factor>
+<Termino> -> <Factor> * <Termino>
+<Termino> -> <Factor> / <Termino>
 
 <Factor> -> "(" <Expresión> ")"
 <Factor> -> id

@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 public class ModeloCompilador {
     private boolean freeWilly = false;
     private List<Lexema> tokens;
+    private AnalisisSintactico sintactico;
     
     private String[] clasificarGrupo(int grupo, String lexema) {
         switch (grupo) {
@@ -171,5 +172,13 @@ public class ModeloCompilador {
             }
         }
         return reporte.toString();
+    }
+    
+    public String analizaTexto (String texto){
+        sintactico = new AnalisisSintactico();
+        
+        //Llamar a la clase AnalisisSintactico()
+        
+        return texto;
     }
 }

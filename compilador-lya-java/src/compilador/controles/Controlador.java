@@ -1,6 +1,7 @@
 package compilador.controles;
 
 
+import compilador.modelos.AnalisisSintactico;
 import compilador.modelos.ModeloCompilador;
 import compilador.vistas.VistaCompilador;
 import java.awt.Color;
@@ -14,6 +15,7 @@ public class Controlador implements ActionListener {
 
     private final VistaCompilador vista;
     private final ModeloCompilador modelo;
+    private AnalisisSintactico sintactico;
 
     public Controlador(VistaCompilador vista, ModeloCompilador modelo) {
         this.vista = vista;
@@ -77,6 +79,17 @@ public class Controlador implements ActionListener {
         }
 
         else if (e.getSource() == vista.getItemSintactico()) {
+            String texto = vista.getArchivo();
+           
+            String resultadoSintactico = modelo.analizaTexto(texto);
+            vista.limpiarResultado();
+            vista.mostrarResultado(resultadoSintactico);
+            
+            if (!modelo.hayCaracteresInvalidos()) {
+                vista.getAreaResultado().setForeground(Color.blue);
+            } else {
+                vista.getAreaResultado().setForeground(Color.red);
+            }
         }
     }   
     private File obtenerDirectorio(){
