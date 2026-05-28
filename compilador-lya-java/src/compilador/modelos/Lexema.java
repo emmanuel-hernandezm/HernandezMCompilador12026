@@ -4,13 +4,15 @@ public class Lexema {
     private String dato;
     private String tipo;
     private int token;
-    private int posError;
+    private int linea;
+    private int columna;
 
-    public Lexema(String dato, String tipo, int token, int posicion) {
+    public Lexema(String dato, String tipo, int token, int linea, int columna) {
         this.dato = dato;
         this.tipo = tipo;
         this.token = token;
-        this.posError = posicion;
+        this.linea = linea;
+        this.columna = columna;
     }
 
     public String getDato() {
@@ -37,17 +39,25 @@ public class Lexema {
         this.token = token;
     }
 
-    public int getPosError() {
-        return posError;
+    public int getLinea() {
+        return linea;
     }
 
-    public void setPosError(int posError) {
-        this.posError = posError;
+    public void setLinea(int linea) {
+        this.linea = linea;
+    }
+    
+    public int getColumna() {
+        return columna;
+    }
+    
+    public void setColumna(int columna) {
+        this.columna = columna;
     }
 
     @Override
     public String toString() {
-        return String.format("%-20s %-8s %d", dato, tipo, token);
+        return String.format("%-20s %-8s %d [L:%d, C:%d]", dato, tipo, token, linea, columna);
     }
     
     

@@ -1,17 +1,17 @@
 package compilador.modelos;
 
 import java.util.ArrayList;
-import compilador.vistas.*;
 
 
 public class AnSintaxis {
     private ArrayList<Lexema> lexemas;
-    private VistaCompilador vista;
     private int tok;
     private int indice = 0;
+    private StringBuilder listaErrores;
 
     public AnSintaxis(ArrayList<Lexema> lexemas) {
         this.lexemas = lexemas;
+        this.listaErrores = new StringBuilder();
     }
 
     private int getNextToken() {
@@ -26,23 +26,40 @@ public class AnSintaxis {
         return elementoActual.getToken(); 
     }
 
-    public void error(String mensaje) {
-        String posIn = "";
-        
+    private void error(String mensaje) {
+        int linea = 0;
+        int col = 0;
+        String charError = "Desconocido";
+
+        // Obtenemos las coordenadas del token que causó el problema
         if (indice > 0 && indice <= lexemas.size()) {
             Lexema last = lexemas.get(indice - 1);
+            linea = last.getLinea();
+            col = last.getColumna();
+            charError = last.getDato();
         }
-      //mandar al areaResultado  
+
+        listaErrores.append("Error: Línea: ").append(linea)
+                    .append(", Columna: ").append(col)
+                    .append(" - ").append(mensaje).append("\n");
+    }
+    
+    public String getErrores() {
+        return listaErrores.toString();
     }
 
     // <Programa> -> <Bloque> "."
     public void programa() {
-        tok = getNextToken();
-        bloque();
-        if (tok != ListaLexemas.PUNTO) {
-            error("Faltó el punto final.");
-        } else {
-        //mandar al areaResultado
+        try {
+            tok = getNextToken();
+            bloque();
+            
+            if (tok != ListaLexemas.PUNTO) {
+                error("Faltó el punto final.");
+            } else {
+
+            }
+        } catch (RuntimeException e) {
         }
     }
 
@@ -55,47 +72,46 @@ public class AnSintaxis {
     }
 
     // <CONSTS> -> "const" <C_CONSTS> ";" | epsilon
-    // FIRST(<CONSTS>) = { "const" } + epsilon
     private void consts() {
         if (tok == ListaLexemas.CONST) {
             tok = getNextToken();
             c_consts();
-            if (tok == ListaLexemas.PUNTO_COMA) {
-                tok = getNextToken();
-            } else {
+            if (tok != ListaLexemas.PUNTO_COMA) {
                 error("Se esperaba ';'");
             }
+            tok = getNextToken();
         }
     }
 
     // <C_CONSTS> -> "id" "=" "num" <R_CONSTS>
     private void c_consts() {
-        if (tok == ListaLexemas.ID) {
-            tok = getNextToken();
-            if (tok == ListaLexemas.IGUAL) {
-                tok = getNextToken();
-                if (tok == ListaLexemas.NUM) {
-                    tok = getNextToken();
-                    r_consts();
-                } else error("Se esperaba número");
-            } else error("Se esperaba '='");
-        } else error("Se esperaba identificador");
+        if (tok != ListaLexemas.ID) { error("Se esperaba identificador"); }
+        tok = getNextToken();
+        
+        if (tok != ListaLexemas.IGUAL) { error("Se esperaba '='"); }
+        tok = getNextToken();
+        
+        if (tok != ListaLexemas.NUM) { error("Se esperaba número"); }
+        tok = getNextToken();
+        
+        r_consts();
     }
 
     // <R_CONSTS> -> "," "id" "=" "num" <R_CONSTS> | epsilon
     private void r_consts() {
         if (tok == ListaLexemas.COMA) {
             tok = getNextToken();
-            if (tok == ListaLexemas.ID) {
-                tok = getNextToken();
-                if (tok == ListaLexemas.IGUAL) {
-                    tok = getNextToken();
-                    if (tok == ListaLexemas.NUM) {
-                        tok = getNextToken();
-                        r_consts();
-                    } else error("Se esperaba número");
-                } else error("Se esperaba '='");
-            } else error("Se esperaba identificador");
+            
+            if (tok != ListaLexemas.ID) { error("Se esperaba identificador"); }
+            tok = getNextToken();
+            
+            if (tok != ListaLexemas.IGUAL) { error("Se esperaba '='"); }
+            tok = getNextToken();
+            
+            if (tok != ListaLexemas.NUM) { error("Se esperaba número"); }
+            tok = getNextToken();
+            
+            r_consts();
         }
     }
 
@@ -104,34 +120,27 @@ public class AnSintaxis {
         if (tok == ListaLexemas.VAR) {
             tok = getNextToken();
             c_vars();
-            if (tok == ListaLexemas.PUNTO_COMA) {
-                tok = getNextToken();
-            } else {
+            if (tok != ListaLexemas.PUNTO_COMA) {
                 error("Se esperaba ';'");
             }
+            tok = getNextToken();
         }
     }
 
     // <C_VARS> -> "id" <R_VARS>
     private void c_vars() {
-        if (tok == ListaLexemas.ID) {
-            tok = getNextToken();
-            r_vars();
-        } else {
-            error("Se esperaba identificador en declaración de variables");
-        }
+        if (tok != ListaLexemas.ID) { error("Se esperaba identificador"); }
+        tok = getNextToken();
+        r_vars();
     }
 
     // <R_VARS> -> "," "id" <R_VARS> | epsilon
     private void r_vars() {
         if (tok == ListaLexemas.COMA) {
             tok = getNextToken();
-            if (tok == ListaLexemas.ID) {
-                tok = getNextToken();
-                r_vars();
-            } else {
-                error("Se esperaba identificador después de la coma");
-            }
+            if (tok != ListaLexemas.ID) { error("Se esperaba identificador"); }
+            tok = getNextToken();
+            r_vars();
         }
     }
 
@@ -139,53 +148,47 @@ public class AnSintaxis {
     private void proceds() {
         if (tok == ListaLexemas.PROCED) {
             tok = getNextToken();
-            if (tok == ListaLexemas.ID) {
-                tok = getNextToken();
-                if (tok == ListaLexemas.PUNTO_COMA) {
-                    tok = getNextToken();
-                    bloque();
-                    if (tok == ListaLexemas.PUNTO_COMA) {
-                        tok = getNextToken();
-                        proceds();
-                    } else error("Se esperaba ';' al final del proced");
-                } else error("Se esperaba ';'");
-            } else error("Se esperaba identificador del procedimiento");
+            
+            if (tok != ListaLexemas.ID) { error("Se esperaba identificador"); }
+            tok = getNextToken();
+            
+            if (tok != ListaLexemas.PUNTO_COMA) { error("Se esperaba ';'"); }
+            tok = getNextToken();
+            
+            bloque();
+            
+            if (tok != ListaLexemas.PUNTO_COMA) { error("Se esperaba ';'"); }
+            tok = getNextToken();
+            
+            proceds();
         }
     }
 
     // <PROPS> -> <INIT> | <IDE> | <WRITE> | <READ> | <CALL> | <IF> | <WHILE> | <FOR>
     private void props() {
-
-        if (tok == ListaLexemas.BEGIN) {
-            init();
-        } else if (tok == ListaLexemas.ID) {
-            ide();
-        } else if (tok == ListaLexemas.WRITE) {
-            write();
-        } else if (tok == ListaLexemas.READ) {
-            read();
-        } else if (tok == ListaLexemas.CALL) {
-            call();
-        } else if (tok == ListaLexemas.IF) {
-            if_prop();
-        } else if (tok == ListaLexemas.WHILE) {
-            while_prop();
-        } else if (tok == ListaLexemas.FOR) {
-            for_prop();
-        } else {
-            error("Se esperaba una proposición válida (FIRST de PROPS)");
-        }
+        // Usamos retornos anticipados para evitar "else if" o "else"
+        if (tok == ListaLexemas.BEGIN) { init(); return; }
+        if (tok == ListaLexemas.ID) { ide(); return; }
+        if (tok == ListaLexemas.WRITE) { write(); return; }
+        if (tok == ListaLexemas.READ) { read(); return; }
+        if (tok == ListaLexemas.CALL) { call(); return; }
+        if (tok == ListaLexemas.IF) { if_prop(); return; }
+        if (tok == ListaLexemas.WHILE) { while_prop(); return; }
+        if (tok == ListaLexemas.FOR) { for_prop(); return; }
+        
+        // Si no entró a ninguno de los de arriba, es un error
+        error("Proposición Inválida");
     }
 
     // <INIT> -> "begin" <D_PROP> "end"
     private void init() {
-        if (tok == ListaLexemas.BEGIN) {
-            tok = getNextToken();
-            d_prop();
-            if (tok == ListaLexemas.END) {
-                tok = getNextToken();
-            } else error("Se esperaba 'end'");
-        }
+        if (tok != ListaLexemas.BEGIN) { error("Se esperaba 'begin'"); }
+        tok = getNextToken();
+        
+        d_prop();
+        
+        if (tok != ListaLexemas.END) { error("Se esperaba 'end'"); }
+        tok = getNextToken();
     }
 
     // <D_PROP> -> <PROPS> <R_PROP>
@@ -210,101 +213,103 @@ public class AnSintaxis {
 
     // <IDE> -> "id" "=" <EXP>
     private void ide() {
-        if (tok == ListaLexemas.ID) {
-            tok = getNextToken();
-            if (tok == ListaLexemas.IGUAL) {
-                tok = getNextToken();
-                exp();
-            } else error("Se esperaba '=' en asignación");
-        }
+        if (tok != ListaLexemas.ID) { error("Se esperaba identificador"); }
+        tok = getNextToken();
+        
+        if (tok != ListaLexemas.IGUAL) { error("Se esperaba '='"); }
+        tok = getNextToken();
+        
+        exp();
     }
 
-// <WRITE> -> "write" <ARG>
+    // <WRITE> -> "write" <ARG>
     private void write() {
-        if (tok == ListaLexemas.WRITE) {
-            tok = getNextToken();
-            arg();
-        } else error("Se esperaba 'write'");
+        if (tok != ListaLexemas.WRITE) { error("Se esperaba 'write'"); }
+        tok = getNextToken();
+        arg();
     }
 
     // <ARG> -> "id" | "num"
     private void arg() {
         if (tok == ListaLexemas.ID || tok == ListaLexemas.NUM) {
             tok = getNextToken();
-        } else {
-            error("Se esperaba 'id' o 'num' como argumento de write");
+            return; // Retorno anticipado
         }
+        error("Se esperaba 'id' o 'num'");
     }
 
     // <READ> -> "read" "id"
     private void read() {
-        if (tok == ListaLexemas.READ) {
-            tok = getNextToken();
-            if (tok == ListaLexemas.ID) {
-                tok = getNextToken();
-            } else error("Se esperaba identificador para el read");
-        } else error("Se esperaba 'read'");
+        if (tok != ListaLexemas.READ) { error("Se esperaba 'read'"); }
+        tok = getNextToken();
+        
+        if (tok != ListaLexemas.ID) { error("Se esperaba identificador"); }
+        tok = getNextToken();
     }
 
     // <CALL> -> "call" "id"
     private void call() {
-        if (tok == ListaLexemas.CALL) {
-            tok = getNextToken();
-            if (tok == ListaLexemas.ID) {
-                tok = getNextToken();
-            } else error("Se esperaba identificador para el call");
-        } else error("Se esperaba 'call'");
+        if (tok != ListaLexemas.CALL) { error("Se esperaba 'call'"); }
+        tok = getNextToken();
+        
+        if (tok != ListaLexemas.ID) { error("Se esperaba identificador "); }
+        tok = getNextToken();
     }
 
     // <IF> -> "if" <COND> "then" <PROPS>
     private void if_prop() {
-        if (tok == ListaLexemas.IF) {
-            tok = getNextToken();
-            cond();
-            if (tok == ListaLexemas.THEN) {
-                tok = getNextToken();
-                props();
-            } else error("Se esperaba 'then' en la estructura if");
-        } else error("Se esperaba 'if'");
+        if (tok != ListaLexemas.IF) { error("Se esperaba 'if'"); }
+        tok = getNextToken();
+        
+        cond();
+        
+        if (tok != ListaLexemas.THEN) { error("Se esperaba 'then'"); }
+        tok = getNextToken();
+        
+        props();
     }
 
     // <WHILE> -> "while" <COND> "do" <PROPS>
     private void while_prop() {
-        if (tok == ListaLexemas.WHILE) {
-            tok = getNextToken();
-            cond();
-            if (tok == ListaLexemas.DO) {
-                tok = getNextToken();
-                props();
-            } else error("Se esperaba 'do' en la estructura while");
-        } else error("Se esperaba 'while'");
+        if (tok != ListaLexemas.WHILE) { error("Se esperaba 'while'"); }
+        tok = getNextToken();
+        
+        cond();
+        
+        if (tok != ListaLexemas.DO) { error("Se esperaba 'do'"); }
+        tok = getNextToken();
+        
+        props();
     }
 
     // <FOR> -> "for" "id" "=" <EXP> <D_FOR> <EXP> "do" <PROPS>
     private void for_prop() {
-        if (tok == ListaLexemas.FOR) {
-            tok = getNextToken();
-            if (tok == ListaLexemas.ID) {
-                tok = getNextToken();
-                if (tok == ListaLexemas.IGUAL) {
-                    tok = getNextToken();
-                    exp();
-                    d_for();
-                    exp();
-                    if (tok == ListaLexemas.DO) {
-                        tok = getNextToken();
-                        props();
-                    } else error("Se esperaba 'do' en la estructura for");
-                } else error("Se esperaba '=' en la estructura for");
-            } else error("Se esperaba identificador en la estructura for");
-        } else error("Se esperaba 'for'");
+        if (tok != ListaLexemas.FOR) { error("Se esperaba 'for'"); }
+        tok = getNextToken();
+        
+        if (tok != ListaLexemas.ID) { error("Se esperaba identificador"); }
+        tok = getNextToken();
+        
+        if (tok != ListaLexemas.IGUAL) { error("Se esperaba '=' "); }
+        tok = getNextToken();
+        
+        exp();
+        d_for();
+        exp();
+        
+        if (tok != ListaLexemas.DO) { error("Se esperaba 'do'"); }
+        tok = getNextToken();
+        
+        props();
     }
 
     // <D_FOR> -> "to" | "down"
     private void d_for() {
         if (tok == ListaLexemas.TO || tok == ListaLexemas.DOWN) {
             tok = getNextToken();
-        } else error("Se esperaba 'to' o 'down'");
+            return;
+        }
+        error("Se esperaba 'to' o 'down'");
     }
     
     // <COND> -> <EXP> <OP> <EXP>
@@ -316,17 +321,14 @@ public class AnSintaxis {
 
     // <OP> -> "==" | "!=" | "<" | ">" | "<=" | ">="
     private void op() {
-        if (tok == ListaLexemas.COMPARA || 
-            tok == ListaLexemas.DIF || 
-            tok == ListaLexemas.MENOR_QUE || 
-            tok == ListaLexemas.MAYOR_QUE || 
-            tok == ListaLexemas.MENOR_IGUAL || 
-            tok == ListaLexemas.MAYOR_IGUAL) {
+        if (tok == ListaLexemas.COMPARA || tok == ListaLexemas.DIF || 
+            tok == ListaLexemas.MENOR_QUE || tok == ListaLexemas.MAYOR_QUE || 
+            tok == ListaLexemas.MENOR_IGUAL || tok == ListaLexemas.MAYOR_IGUAL) {
             
             tok = getNextToken(); 
-        } else {
-            error("Se esperaba un operador relacional (==, !=, <, >, <=, >=)");
+            return;
         }
+        error("Se esperaba (==, !=, <, >, <=, >=)");
     }
     
     // <EXP> -> <TERM> <EXP_A>
@@ -341,7 +343,6 @@ public class AnSintaxis {
             tok = getNextToken();
             exp();
         }
-        // epsilon
     }
 
     // <TERM> -> <FACT> <TERM_A>
@@ -356,21 +357,25 @@ public class AnSintaxis {
             tok = getNextToken();
             term();
         }
-        // epsilon
     }
 
     // <FACT> -> "(" <EXP> ")" | "id" | "num"
     private void fact() {
         if (tok == ListaLexemas.ID || tok == ListaLexemas.NUM) {
             tok = getNextToken();
-        } else if (tok == ListaLexemas.ABRE_PARENT) {
+            return;
+        } 
+        
+        if (tok == ListaLexemas.ABRE_PARENT) {
             tok = getNextToken();
             exp();
-            if (tok == ListaLexemas.CIERRA_PARENT) {
-                tok = getNextToken();
-            } else error("Se esperaba ')'");
-        } else {
-            error("Se esperaba id, num o '('");
-        }
+            if (tok != ListaLexemas.CIERRA_PARENT) {
+                error("Se esperaba ')'");
+            }
+            tok = getNextToken();
+            return;
+        } 
+        
+        error("Se esperaba id, num o '('");
     }
 }

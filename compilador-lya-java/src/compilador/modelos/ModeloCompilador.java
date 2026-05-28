@@ -112,6 +112,20 @@ public class ModeloCompilador {
     public boolean hayCaracteresInvalidos(){
         return freeWilly;
     }
+    
+    private int[] obtenerFilaColumna(String texto, int index) {
+        int linea = 1;
+        int columna = 1;
+        for (int i = 0; i < index; i++) {
+            if (texto.charAt(i) == '\n') {
+                linea++;
+                columna = 1;
+            } else {
+                columna++;
+            }
+        }
+        return new int[]{linea, columna};
+    }
 
     public String buscaEnTexto(String texto) {
         freeWilly = false;
@@ -141,7 +155,11 @@ public class ModeloCompilador {
                     posicion ++;
                     
                     if(i == 6) freeWilly = true;
-                    tokens.add(new Lexema(grupo, tipo, codigo, posicion));
+                    
+                    int startIndex = matcher.start(i);
+                    int[] pos = obtenerFilaColumna(texto, startIndex);
+      
+                    tokens.add(new Lexema(grupo, tipo, codigo, pos[0], pos[1]));
                     break;
                 }
             }
@@ -159,15 +177,18 @@ public class ModeloCompilador {
             reporte.append("No es posible compilar: \n\n");
             for (Lexema e : tokens) {
                 if (e.getTipo().equals("[E]")) {
-                    int posError = e.getPosError();
-                    reporte.append("Error en la posicion [").append(posError).append("] - Caracter no reconocido: ").append(e.getDato()).append("\n");
+                    int lineaError = e.getLinea();
+                    int colError = e.getColumna();
+                    reporte.append("Error Léxico en la Línea [").append(lineaError)
+                           .append("], Columna [").append(colError)
+                           .append("] - Carácter no reconocido: ").append(e.getDato()).append("\n");
                 }
             }
         } else {
             reporte.append("COMPILACIÓN EXITOSA\n\n");
             int linea = 1;
             for (Lexema e : tokens) {
-                reporte.append(linea).append(". ").append(e.getTipo() + "    ").append(e.getDato()).append("\n");
+                reporte.append(linea).append(". ").append(e.getTipo()).append("    ").append(e.getDato()).append("\n");
                 linea++;
             }
         }
@@ -177,7 +198,11 @@ public class ModeloCompilador {
     public String analizaTexto() { 
         AnSintaxis sintactico = new AnSintaxis((ArrayList<Lexema>) tokens);
         sintactico.programa();
-        String mientras = "";
-        return mientras;
+        String errores = sintactico.getErrores();
+        if (errores.isEmpty()) {
+            return "Compilacion exitosa!";
+        } else {
+            return errores;
+        }
     }
 }
