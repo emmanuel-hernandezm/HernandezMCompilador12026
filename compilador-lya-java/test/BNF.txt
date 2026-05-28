@@ -1,0 +1,54 @@
+<Programa> ::= <Bloque> "."
+
+	<Bloque> ::= <CONSTS> <VARS> <PROCEDS> <PROPS>
+
+		<CONSTS> ::= const <C_CONSTS> ; <Bloque> | ε
+
+			<C_CONSTS> ::= id = num <R_CONSTS>
+
+				<R_CONSTS> ::= , id = num <R_CONSTS> | ε
+
+		<VARS> ::= var <C_VARS> ; <Bloque> | ε
+
+			<C_VARS> ::= id <R_VARS>
+
+				<R_VARS> ::= , id <R_VARS> | ε
+
+		<PROCEDS> ::= proced id ; <Bloque> ; <Bloque> | ε
+
+		<PROPS> ::= <INIT> | <IDE> | <WRITE> | <READ> | <CALL> | <IF> | <WHILE> | <FOR>
+
+			<INIT> ::= begin <D_PROP> end
+				<D_PROP> ::= <PROPS> <R_PROP>
+
+				<R_PROP> ::= ; <PROPS> <R_PROP> | ε
+
+			<IDE> ::= id = <EXP>
+
+			<WRITE> ::= write <ARG>
+
+				<ARG> ::= id | num
+
+			<READ> ::= read id
+			
+			<CALL> ::= call id
+
+			<IF> ::= if <COND> then <PROPS>
+
+			<WHILE> ::= while <COND> do <PROPS>
+
+			<FOR> ::= for id = <EXP> <D_FOR> <EXP> do <PROPS>
+
+				<D_FOR> ::= to | down
+
+	<COND> ::= <EXP> <OP> <EXP>
+
+		<EXP> ::= <TERM> | <TERM> + <EXP> | <TERM> - <EXP>
+
+			<TERM> ::= <FACT> | <FACT> * <TERM> | <FACT> / <TERM>
+
+				<FACT> ::= ( <EXP> ) | id | num
+		
+		<OP> ::= == | != | < | > | <= | >=
+	
+

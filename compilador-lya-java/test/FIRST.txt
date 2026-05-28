@@ -1,0 +1,57 @@
+FIRST(<Programa>) = { "const", "var", "proced", "begin", "id", "write", "read", "call", "if", "while", "for" }
+
+FIRST(<Bloque>)  = { "const", "var", "proced", "begin", "id", "write", "read", "call", "if", "while", "for" }
+
+FIRST(<CONSTS>)  = { "const" } + ε
+
+FIRST(<C_CONSTS>) = { "id" }
+
+FIRST(<R_CONSTS>) = { "," } + ε
+
+FIRST(<VARS>)    = { "var" } + ε
+
+FIRST(<C_VARS>)  = { "id" }
+
+FIRST(<R_VARS>)  = { "," } + ε
+
+FIRST(<PROCEDS>) = { "proced" } + ε
+
+FIRST(<PROPS>)   = { "begin", "id", "write", "read", "call", "if", "while", "for" }
+
+FIRST(<INIT>)    = { "begin" }
+
+FIRST(<D_PROP>)  = { "begin", "id", "write", "read", "call", "if", "while", "for" }
+
+FIRST(<R_PROP>)  = { ";" } + ε
+
+FIRST(<IDE>)     = { "id" }
+
+FIRST(<WRITE>)   = { "write" }
+
+FIRST(<ARG>)     = { "id", "num" }
+
+FIRST(<READ>)    = { "read" }
+
+FIRST(<CALL>)    = { "call" }
+
+FIRST(<IF>)      = { "if" }
+
+FIRST(<WHILE>)   = { "while" }
+
+FIRST(<FOR>)     = { "for" }
+
+FIRST(<D_FOR>)   = { "to", "down" }
+
+FIRST(<COND>)    = { "(", "id", "num" }
+
+FIRST(<EXP>)     = { "(", "id", "num" }
+
+FIRST(<EXP_A>) = { "+", "-" } + ε
+
+FIRST(<TERM>)    = { "(", "id", "num" }
+
+FIRST(<TERM_A>) = { "*", "/" } + ε
+
+FIRST(<FACT>)    = { "(", "id", "num" }
+
+FIRST(<OP>)      = { "==", "!=", "<", ">", "<=", ">=" }
