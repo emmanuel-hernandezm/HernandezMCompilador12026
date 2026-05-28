@@ -173,12 +173,4 @@ public class ModeloCompilador {
         }
         return reporte.toString();
     }
-    
-    public String analizaTexto (String texto){
-        sintactico = new AnalisisSintactico();
-        
-        //Llamar a la clase AnalisisSintactico()
-        
-        return texto;
-    }
 }
