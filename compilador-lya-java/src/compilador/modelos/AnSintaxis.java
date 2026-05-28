@@ -39,9 +39,13 @@ public class AnSintaxis {
             charError = last.getDato();
         }
 
-        listaErrores.append("Error: Línea: ").append(linea)
-                    .append(", Columna: ").append(col)
-                    .append(" - ").append(mensaje).append("\n");
+        // AQUÍ ESTÁ EL NUEVO FORMATO
+        listaErrores.append("[Línea ").append(linea)
+                    .append(", Columna ").append(col)
+                    .append("] Error: \"").append(mensaje + "\n");
+                    
+        // Lanzamos un error interno para romper la recursividad de golpe (Efecto cascada)
+        throw new RuntimeException("DetenerAnalisis");
     }
     
     public String getErrores() {

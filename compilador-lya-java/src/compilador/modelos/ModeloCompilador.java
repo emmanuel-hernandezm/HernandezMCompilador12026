@@ -200,8 +200,10 @@ public class ModeloCompilador {
         sintactico.programa();
         String errores = sintactico.getErrores();
         if (errores.isEmpty()) {
+            freeWilly = false;
             return "Compilacion exitosa!";
         } else {
+            freeWilly = true;
             return errores;
         }
     }
