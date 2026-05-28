@@ -173,4 +173,11 @@ public class ModeloCompilador {
         }
         return reporte.toString();
     }
+    
+    public String analizaTexto() { 
+        AnSintaxis sintactico = new AnSintaxis((ArrayList<Lexema>) tokens);
+        sintactico.programa();
+        String mientras = "";
+        return mientras;
+    }
 }

@@ -80,6 +80,10 @@ public class Controlador implements ActionListener {
 
         else if (e.getSource() == vista.getItemSintactico()) {
             
+            String resultado = modelo.analizaTexto(); 
+            vista.limpiarResultado();
+            vista.mostrarResultado(resultado);
+            
             if (!modelo.hayCaracteresInvalidos()) {
                 vista.getAreaResultado().setForeground(Color.blue);
             } else {

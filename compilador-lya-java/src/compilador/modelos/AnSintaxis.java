@@ -10,14 +10,13 @@ public class AnSintaxis {
     private int tok;
     private int indice = 0;
 
-    public AnSintaxis(ArrayList<Lexema> lexemas, VistaCompilador vista) {
+    public AnSintaxis(ArrayList<Lexema> lexemas) {
         this.lexemas = lexemas;
-        this.vista = vista;
     }
 
     private int getNextToken() {
         if (indice >= lexemas.size()) {
-            error("Fin de archivo inesperado")
+            error("Fin de archivo inesperado");
             return -1; 
         }
         
@@ -27,13 +26,13 @@ public class AnSintaxis {
         return elementoActual.getToken(); 
     }
 
-    private void error(String mensaje) {
+    public void error(String mensaje) {
         String posIn = "";
         
         if (indice > 0 && indice <= lexemas.size()) {
             Lexema last = lexemas.get(indice - 1);
         }
-        
+      //mandar al areaResultado  
     }
 
     // <Programa> -> <Bloque> "."
@@ -43,7 +42,7 @@ public class AnSintaxis {
         if (tok != ListaLexemas.PUNTO) {
             error("Faltó el punto final.");
         } else {
-            System.out.println("Análisis Sintáctico Correcto");
+        //mandar al areaResultado
         }
     }
 
