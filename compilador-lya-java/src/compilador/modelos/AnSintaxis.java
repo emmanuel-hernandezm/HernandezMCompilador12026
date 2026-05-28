@@ -1,22 +1,39 @@
 package compilador.modelos;
 
 import java.util.ArrayList;
+import compilador.vistas.*;
 
 
 public class AnSintaxis {
-    private ArrayList<String> lexemas;
+    private ArrayList<Lexema> lexemas;
+    private VistaCompilador vista;
     private int tok;
+    private int indice = 0;
 
-    public AnSintaxis(ArrayList<String> lexemas) {
+    public AnSintaxis(ArrayList<Lexema> lexemas, VistaCompilador vista) {
         this.lexemas = lexemas;
+        this.vista = vista;
     }
 
     private int getNextToken() {
-        return 0;
+        if (indice >= lexemas.size()) {
+            error("Fin de archivo inesperado")
+            return -1; 
+        }
+        
+        Lexema elementoActual = lexemas.get(indice);
+        indice++;
+        
+        return elementoActual.getToken(); 
     }
 
     private void error(String mensaje) {
-        System.out.println("Error de sintaxis: " + mensaje);
+        String posIn = "";
+        
+        if (indice > 0 && indice <= lexemas.size()) {
+            Lexema last = lexemas.get(indice - 1);
+        }
+        
     }
 
     // <Programa> -> <Bloque> "."
